@@ -10,7 +10,7 @@
 import express from "express"; //"type" : "Module";
 import { Db, MongoClient } from "mongodb";
 const app = express();
-//We are storing the Mongo URL in Dotenv and that is secure file so we import that file(.env) and to index.js
+//We are storing the Mongo URL in Dotenv and that is secure file so we import that file from (.env) and to index.js
 import * as dotenv from 'dotenv';
 dotenv.config();
 console.log(process.env.MONGO_URL)

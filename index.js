@@ -15,7 +15,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 console.log(process.env.MONGO_URL)
 
-const PORT = 4000;
+// const PORT = 4000;
+const PORT = process.env.PORT;
 // const PORT = 4000; I changed port no as 6000 because something in port no 4000 running we cannot get output.
 
 app.use(express.json());

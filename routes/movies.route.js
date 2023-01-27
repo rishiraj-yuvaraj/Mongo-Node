@@ -1,10 +1,12 @@
 import express, { Router } from "express";
 import { client } from "../index.js";
+import { auth } from "../middleware/auth.js";
 import { GetMovies, getMoviesById, createMovies, deleteMoviesById, updateMoviesById } from "../services/movies.service.js";
 const router = express.Router();
 
 // converted from index.js code
 // getting datas from mongo server
+
 router.get("/", async function(request, response){
     //rating is number only string wil display as output so we have to give this +symbol in front to convert it as number and show it in result.
     if(request.query.rating){
@@ -74,5 +76,3 @@ router.put("/:id", async function(request, response){
 })
 
 export default router;
-
-

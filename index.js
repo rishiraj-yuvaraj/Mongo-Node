@@ -1,4 +1,3 @@
-
 //everytime to update we have to cut the server and to restart the server 
 //To cut the server Ctrl+C
 
@@ -10,9 +9,15 @@
 import express from "express"; //"type" : "Module";
 import { Db, MongoClient } from "mongodb";
 import moviesRouter from "./routes/movies.route.js";
+import usersRouter from "./routes/users.route.js";
+
+import * as dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+import cors from "cors";
+
 const app = express();
 //We are storing the Mongo URL in Dotenv and that is secure file so we import that file(.env) and to index.js
-import * as dotenv from 'dotenv';
+
 dotenv.config();
 console.log(process.env.MONGO_URL)
 
@@ -20,7 +25,7 @@ const PORT = process.env.PORT;
 // const PORT = 4000; I changed port no as 6000 because something in port no 4000 running we cannot get output.
 
 app.use(express.json());
-
+app.use(cors());
 
 //connection
 //connection code between mongo and node
@@ -140,7 +145,56 @@ app.get("/", function(request, response){
 //previous code pasted in movies.route.js
 
 app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
+
+
+
+// const mobiles = [
+//     {
+//     "model": "OnePlus 9 5G",
+//     "img": "https://m.media-amazon.com/images/I/61fy+u9uqPL._SX679_.jpg",
+//     "company": "Oneplus"
+//     },
+//     {
+//     "model": "Iphone 13 mini",
+//     "img": "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=470&hei=556&fmt=jpeg&qlt=95&.v=1645572315986",
+//     "company": "Apple"
+//     },
+//     {
+//     "model": "Samsung s21 ultra",
+//     "img": "https://m.media-amazon.com/images/I/81kfA-GtWwL._SY606_.jpg",
+//     "company": "Samsung"
+//     },
+//     {
+//     "model": "Xiomi mi 11",
+//     "img": "https://m.media-amazon.com/images/I/51K4vNxMAhS._AC_SX522_.jpg",
+//     "company": "Xiomi"
+//     }
+//     ];
+// /mobiles --> data
+
+app.get("/mobiles", async(request, response) => {
+    //db.mobiles.find({});
+    const mobiles = await client.db("Mongo-node").collection("users").find({}).toArray();
+    response.send(mobiles);
+});
+
+app.post("/mobiles", async (request, response) => {
+    const data = request.body;
+    //db.mobiles.insertMany(data);
+    const result = await client.db("Mongo-node").collection("users").insertMany(data);
+    response.send(result);
+});
 
 app.listen(PORT,() => console.log(`The server started in: ${PORT} ✨✨`));
 
 export { client };
+
+// async function generatedHashedPassword(password){
+//     const NO_OF_ROUNDS = 10;
+//     const salt = await bcrypt.genSalt(NO_OF_ROUNDS);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+//     console.log(salt);
+//     console.log(hashedPassword);
+// }
+// generatedHashedPassword("password@123");

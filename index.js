@@ -10,12 +10,14 @@ import express from "express"; //"type" : "Module";
 import { Db, MongoClient } from "mongodb";
 import moviesRouter from "./routes/movies.route.js";
 import usersRouter from "./routes/users.route.js";
-
+import webcodeRouter from "./routes/webcode.route.js";
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import cors from "cors";
 
+
 const app = express();
+
 //We are storing the Mongo URL in Dotenv and that is secure file so we import that file(.env) and to index.js
 
 dotenv.config();
@@ -146,6 +148,7 @@ app.get("/", function(request, response){
 
 app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
+app.use("/webcode", webcodeRouter);
 
 
 

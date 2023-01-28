@@ -49,7 +49,7 @@ router.post("/signup", async function(request, response){       //this line is n
 })
 
 
-router.post("/login", async function(request, response){       //this line is navigating to signup page
+router.post("/login", async function(request, response){       //this line is navigating to Login page
     const {username, password} = request.body;
 
     const usersFromDB = await getUsersByName(username);
@@ -68,7 +68,5 @@ router.post("/login", async function(request, response){       //this line is na
         }
     }
 })
-
-
 
 export default router;

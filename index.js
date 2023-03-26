@@ -1,22 +1,19 @@
 //everytime to update we have to cut the server and to restart the server 
 //To cut the server Ctrl+C
-
-
 //Express JS
-
-
 // const express = require("express");
 import express from "express"; //"type" : "Module";
 import { Db, MongoClient } from "mongodb";
 import moviesRouter from "./routes/movies.route.js";
 import usersRouter from "./routes/users.route.js";
 import webcodeRouter from "./routes/webcode.route.js";
+//import capstoneRouter from "./routes/capstone.route.js";
 import * as dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import cors from "cors";
 
 
-const app = express();
+export const app = express();
 
 //We are storing the Mongo URL in Dotenv and that is secure file so we import that file(.env) and to index.js
 
@@ -149,6 +146,7 @@ app.get("/", function(request, response){
 app.use("/movies", moviesRouter);
 app.use("/users", usersRouter);
 app.use("/webcode", webcodeRouter);
+//app.use("/capstone", capstoneRouter);
 
 
 
@@ -188,6 +186,61 @@ app.post("/mobiles", async (request, response) => {
     const result = await client.db("Mongo-node").collection("users").insertMany(data);
     response.send(result);
 });
+
+
+
+
+
+
+
+//capstone code starts here
+app.post("/register", async function(request, response){
+    const data = request.body;
+    console.log(data);
+    const mentor = await client.db("Capstone").collection("capstone").insertMany([data]);
+    
+    response.send(mentor);
+})
+
+
+app.get("/login", async function(request, response){
+    const emailget = await client.db('Capstone').collection("capstone").find({});
+    response.send(emailget);
+})
+
+//login check
+app.post("/login", async function(request, response){
+    try {
+        const email = request.body.email;
+        const password = request.body.password;
+        //console.log(`${email} and your password is ${password}`);
+
+        const emailpost = await client.db('Capstone').collection("capstone").findOne({email: email});
+        
+        if(emailpost.password === password){
+            response.status(201).send("Successfull Login")
+        }else{
+            response.status(400).send("Invalid Login Credentials");
+        }
+
+    } catch (error) {
+        response.status(400).send("Invalid email")
+    }
+})
+
+
+app.post("/Leregistration", async function(request, response){
+    const data = request.body;
+    console.log(data);
+    const mentor = await client.db("Capstone").collection("leregistration").insertMany([data]);
+    response.send(mentor);
+})
+
+app.get("/LeExisting", async function(reques, response){
+    const userget = await client.db('Capstone').collection("leregistration").find({}).toArray();
+    response.send(userget);
+})
+
 
 app.listen(PORT,() => console.log(`The server started in: ${PORT} ✨✨`));
 

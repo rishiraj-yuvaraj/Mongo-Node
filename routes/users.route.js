@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import express from "express";
 import { client } from "../index.js";
 import { GetMovies, getMoviesById, createMovies, deleteMoviesById, updateMoviesById } from "../services/movies.service.js";
-import { createUsers, getUsersByName } from "../services/users.service.js";
+//import { createUsers, getUsersByName } from "../services/users.service.js";
 import jwt  from "jsonwebtoken";
 
 
@@ -29,17 +29,20 @@ async function generatedHashedPassword(password){
 
 
 //this step will make the password collapsed -> hashed password -> no one cannot recognize the password
-router.post("/signup", async function(request, response){       //this line is navigating to signup page
-    const {username, password} = request.body;
+//router.post("/signup", async function(request, response){       //this line is navigating to signup page
+ router.post("/register", async function(request, response){
+    //const {username, password} = request.body;
+    const {data} = request.body;
 
-    const usersFromDB = await getUsersByName(username);
+    const usersFromDB = await createUsers({data});
+    console.log({email, password});
     if(usersFromDB){
         response.status(400).send({message : "user already exist"});
     }else if(password.length < 8){
         response.status(400).send({message : "Password must be atleast 8 charecters"});
     }else{
         const hashedPassword = await generatedHashedPassword(password);
-        const result = await createUsers({username : username, password: hashedPassword });
+        const result = await createUsers({email : email, password: hashedPassword });
         response.send(result);
     }
     
@@ -68,5 +71,8 @@ router.post("/login", async function(request, response){       //this line is na
         }
     }
 })
+
+
+
 
 export default router;

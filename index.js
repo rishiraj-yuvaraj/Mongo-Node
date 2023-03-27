@@ -242,6 +242,30 @@ app.get("/LeExisting", async function(reques, response){
 })
 
 
+app.post("/Ceregistration", async function(request, response){
+    const data = request.body;
+    console.log(data);
+    const mentor = await client.db("Capstone").collection("ceregistration").insertMany([data]);
+    response.send(mentor);
+})
+
+app.get("/CeExisting", async function(reques, response){
+    const userget = await client.db('Capstone').collection("ceregistration").find({}).toArray();
+    response.send(userget);
+})
+
+app.post("/Iperegistration", async function(request, response){
+    const data = request.body;
+    console.log(data);
+    const mentor = await client.db("Capstone").collection("iperegistration").insertMany([data]);
+    response.send(mentor);
+})
+
+app.get("/IpeExisting", async function(reques, response){
+    const userget = await client.db('Capstone').collection("iperegistration").find({}).toArray();
+    response.send(userget);
+})
+
 app.listen(PORT,() => console.log(`The server started in: ${PORT} ✨✨`));
 
 export { client };
